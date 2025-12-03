@@ -62,12 +62,25 @@ html {
     padding: 12px;
     font-size: 24px;
     font-weight: bold;
+    position: relative;
 }
 
 .logo-icon {
     width: 40px;
     height: 40px;
     fill: var(--wiki-color);
+}
+
+.version-text {
+    font-size: 10px;
+    font-weight: normal;
+    color: var(--text-secondary);
+    background-color: var(--bg-tertiary);
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-left: -4px;
+    align-self: flex-start;
+    margin-top: 2px;
 }
 
 .nav-menu {
