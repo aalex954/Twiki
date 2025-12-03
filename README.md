@@ -5,7 +5,8 @@
 ![Twiki Banner](https://img.shields.io/badge/Powered%20by-Wikipedia%20%2B%20OpenAI-blue)
 [![Deploy Twiki](https://github.com/aalex954/Twiki/actions/workflows/static.yml/badge.svg)](https://github.com/aalex954/Twiki/actions/workflows/static.yml)
 
-<img width="1209" height="774" alt="image" src="https://github.com/user-attachments/assets/955f2d6c-7d2c-401c-86d1-7cac224a16eb" />
+<img width="1213" height="1289" alt="image" src="https://github.com/user-attachments/assets/99ebd134-100b-4098-8469-afedac69f021" />
+
 
 Try It Here! : [Twiki on github.io](https://aalex954.github.io/Twiki/)
 
