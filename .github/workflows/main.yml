@@ -1,0 +1,62 @@
+name: Update Version Number
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version number (e.g., 0.1.0)'
+        required: true
+        default: '1.0.0'
+
+jobs:
+  update-version:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get version from tag or input
+        id: get_version
+        run: |
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            VERSION="${{ github.event.inputs.version }}"
+          else
+            VERSION="${GITHUB_REF#refs/tags/v}"
+          fi
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+          echo "Version: $VERSION"
+
+      - name: Update version in index.html
+        run: |
+          VERSION="${{ steps.get_version.outputs.VERSION }}"
+          
+          # Update mobile header version
+          sed -i 's/<span class="version-text">v[^<]*<\/span>/<span class="version-text">v'"$VERSION"'<\/span>/g' index.html
+          
+          # Update sidebar version
+          sed -i 's/<span class="version-text">v[^<]*<\/span>/<span class="version-text">v'"$VERSION"'<\/span>/g' index.html
+          
+          # If version text doesn't exist yet, this is handled by the initial HTML structure
+          
+          echo "Updated version to v$VERSION"
+
+      - name: Commit and push changes
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          
+          if git diff --quiet; then
+            echo "No changes to commit"
+          else
+            git add index.html
+            git commit -m "chore: update version to v${{ steps.get_version.outputs.VERSION }}"
+            git push
+          fi
