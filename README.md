@@ -22,11 +22,15 @@ Twiki transforms dry Wikipedia content into viral, shareable social media posts.
 - Infinite scroll for endless learning
 - Like, bookmark, and share functionality
 - Topic-based filtering
+- **Fully responsive mobile design** with dedicated mobile navigation and touch-friendly UI
 
 ### Wikipedia Integration
 - Fetches random articles from Wikipedia REST API
 - "Trending" tab uses Wikipedia's "On This Day" historical events
 - Direct links to full Wikipedia articles for deeper reading
+- **200+ curated topics** spanning science, history, space, technology, philosophy, and more
+- **Smart topic rotation** - tracks recently shown topics to avoid repetition
+- **Related article discovery** - finds varied articles within your chosen topic
 
 ### AI-Powered Content Generation
 Uses OpenAI to transform Wikipedia content into engaging posts with 10 different styles:
@@ -76,11 +80,20 @@ No build process, no dependencies, no server required. Just open and go.
 
 ## Usage
 
+### Mobile Experience
+
+On mobile devices, Twiki provides a native app-like experience:
+- **Top header** with logo, search, and settings buttons
+- **Bottom navigation bar** for quick tab switching
+- **Pull down to refresh** your feed
+- **Tap the search icon** to explore topics or search anything
+- **Add to Home Screen** for the best experience (supported on iOS and Android)
+
 ### Feed Tabs
 
-- **For You**: Random mix of fascinating topics
+- **For You**: Random mix of fascinating topics from 200+ curated subjects
 - **Trending**: Historical events that happened on today's date
-- **Memes**: Twitter/Reddit-style shitposts with educational facts
+- **Memes**: Twitter/Reddit-style shitposts with educational facts (uses 100+ relatable topics like procrastination, coffee, cats, tech struggles, etc.)
 - **Random**: Completely random Wikipedia articles
 
 ### Topic Tags
@@ -140,26 +153,21 @@ Twiki/
    - `/page/random/summary` - Random articles
    - `/page/summary/{title}` - Article summaries
    - `/feed/onthisday/events/{MM}/{DD}` - Historical events
+   - `/w/api.php?action=query&list=search` - Related article discovery
 
 2. **OpenAI Chat Completions API**
    - Models: GPT-5 Nano, GPT-5 Mini, GPT-5.1, GPT-4.1 Mini, GPT-4.1
    - Temperature: 0.8 (standard) / 1.3 (meme mode for extra chaos)
 
-### Browser Compatibility
+### Mobile Support
 
-Works in all modern browsers:
-- Chrome/Edge 80+
-- Firefox 75+
-- Safari 13+
-
-## Contributing
-
-Feel free to fork and improve! Some ideas:
-- Add more post styles
-- Implement actual threading (multi-post threads)
-- Add image generation for posts
-- Create a "bookmarks" view
-- Add share to actual social media
+Twiki is fully responsive with dedicated mobile optimizations:
+- **Mobile Header**: Compact header with search and settings buttons
+- **Bottom Navigation**: Quick access to Home, Trending, Refresh, Memes, and Random tabs
+- **Search Overlay**: Full-screen search with topic suggestions
+- **Touch-Friendly**: Larger tap targets and swipe-optimized interactions
+- **Safe Area Support**: Properly handles notches and home indicators on modern phones
+- **PWA-Ready**: Supports "Add to Home Screen" for app-like experience
 
 ## Disclaimer
 
