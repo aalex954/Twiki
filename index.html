@@ -2,12 +2,60 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#000000">
+    <meta name="mobile-web-app-capable" content="yes">
     <title>Twiki - Educational Doom Scrolling</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="app-container">
+        <!-- Mobile Header -->
+        <header class="mobile-header">
+            <div class="logo">
+                <svg viewBox="0 0 24 24" class="logo-icon">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+                </svg>
+                <span>Twiki</span>
+            </div>
+            <div class="mobile-header-actions">
+                <button class="mobile-header-btn" id="mobile-search-btn" aria-label="Search">
+                    <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+                </button>
+                <button class="mobile-header-btn" id="mobile-config-btn" aria-label="Settings">
+                    <svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.31.06-.63.06-.94 0-.31-.02-.63-.06-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.04.31-.06.63-.06.94s.02.63.06.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
+                </button>
+            </div>
+        </header>
+
+        <!-- Mobile Search Overlay -->
+        <div class="mobile-search-overlay" id="mobile-search-overlay">
+            <div class="mobile-search-header">
+                <button class="back-btn" id="mobile-search-close" aria-label="Close search">
+                    <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+                </button>
+                <input type="text" placeholder="Search topics..." id="mobile-search-input" autocomplete="off">
+            </div>
+            <div class="mobile-search-body">
+                <h3 style="color: var(--text-secondary); margin-bottom: 16px; font-size: 14px;">Topics to Explore</h3>
+                <div class="topic-tags">
+                    <span class="topic-tag mobile-topic" data-topic="Science">🔬 Science</span>
+                    <span class="topic-tag mobile-topic" data-topic="History">📜 History</span>
+                    <span class="topic-tag mobile-topic" data-topic="Space">🚀 Space</span>
+                    <span class="topic-tag mobile-topic" data-topic="Animals">🦁 Animals</span>
+                    <span class="topic-tag mobile-topic" data-topic="Technology">💻 Technology</span>
+                    <span class="topic-tag mobile-topic" data-topic="Art">🎨 Art</span>
+                    <span class="topic-tag mobile-topic" data-topic="Music">🎵 Music</span>
+                    <span class="topic-tag mobile-topic" data-topic="Food">🍕 Food</span>
+                    <span class="topic-tag mobile-topic" data-topic="Sports">⚽ Sports</span>
+                    <span class="topic-tag mobile-topic" data-topic="Philosophy">🤔 Philosophy</span>
+                    <span class="topic-tag mobile-topic" data-topic="Memes">😂 Memes</span>
+                </div>
+            </div>
+        </div>
+
         <!-- Sidebar -->
         <nav class="sidebar">
             <div class="logo">
@@ -159,6 +207,31 @@
                 <button class="save-btn" id="save-config">Save Configuration</button>
             </div>
         </div>
+    </div>
+
+    <!-- Mobile Bottom Navigation -->
+        <nav class="mobile-nav">
+            <button class="mobile-nav-item active" data-tab="foryou" id="mobile-nav-home">
+                <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+                <span>Home</span>
+            </button>
+            <button class="mobile-nav-item" data-tab="trending" id="mobile-nav-trending">
+                <svg viewBox="0 0 24 24"><path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6z"/></svg>
+                <span>Trending</span>
+            </button>
+            <button class="mobile-nav-item" id="mobile-nav-refresh">
+                <svg viewBox="0 0 24 24"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+                <span>Refresh</span>
+            </button>
+            <button class="mobile-nav-item" data-tab="memes" id="mobile-nav-memes">
+                <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z"/></svg>
+                <span>Memes</span>
+            </button>
+            <button class="mobile-nav-item" data-tab="random" id="mobile-nav-random">
+                <svg viewBox="0 0 24 24"><path d="M10.59 9.17L5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5zm.33 9.41l-1.41 1.41 3.13 3.13L14.5 20H20v-5.5l-2.04 2.04-3.13-3.13z"/></svg>
+                <span>Random</span>
+            </button>
+        </nav>
     </div>
 
     <script src="app.js"></script>

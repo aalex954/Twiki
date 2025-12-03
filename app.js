@@ -87,6 +87,78 @@ class TwikiApp {
                 this.updateSliderDisplays();
             });
         });
+        
+        // Mobile navigation
+        this.setupMobileNavigation();
+    }
+    
+    setupMobileNavigation() {
+        // Mobile config button
+        const mobileConfigBtn = document.getElementById('mobile-config-btn');
+        if (mobileConfigBtn) {
+            mobileConfigBtn.addEventListener('click', () => this.openConfigModal());
+        }
+        
+        // Mobile search
+        const mobileSearchBtn = document.getElementById('mobile-search-btn');
+        const mobileSearchOverlay = document.getElementById('mobile-search-overlay');
+        const mobileSearchClose = document.getElementById('mobile-search-close');
+        const mobileSearchInput = document.getElementById('mobile-search-input');
+        
+        if (mobileSearchBtn && mobileSearchOverlay) {
+            mobileSearchBtn.addEventListener('click', () => {
+                mobileSearchOverlay.classList.add('active');
+                mobileSearchInput?.focus();
+            });
+            
+            mobileSearchClose?.addEventListener('click', () => {
+                mobileSearchOverlay.classList.remove('active');
+            });
+            
+            mobileSearchInput?.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter' && e.target.value.trim()) {
+                    this.searchTopic(e.target.value);
+                    mobileSearchOverlay.classList.remove('active');
+                    e.target.value = '';
+                }
+            });
+        }
+        
+        // Mobile topic tags
+        document.querySelectorAll('.mobile-topic').forEach(tag => {
+            tag.addEventListener('click', (e) => {
+                this.selectTopic(e.target.dataset.topic);
+                mobileSearchOverlay?.classList.remove('active');
+            });
+        });
+        
+        // Mobile bottom navigation
+        const mobileNavItems = document.querySelectorAll('.mobile-nav-item');
+        mobileNavItems.forEach(item => {
+            item.addEventListener('click', (e) => {
+                const tab = item.dataset.tab;
+                
+                // Handle refresh button
+                if (item.id === 'mobile-nav-refresh') {
+                    this.refreshFeed();
+                    return;
+                }
+                
+                // Update active state
+                mobileNavItems.forEach(nav => nav.classList.remove('active'));
+                item.classList.add('active');
+                
+                // Switch tab
+                if (tab) {
+                    this.switchTab(tab);
+                    
+                    // Also update desktop tabs
+                    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                    const desktopTab = document.querySelector(`.tab[data-tab="${tab}"]`);
+                    if (desktopTab) desktopTab.classList.add('active');
+                }
+            });
+        });
     }
     
     loadConfig() {
@@ -165,7 +237,19 @@ class TwikiApp {
         this.currentTopic = null;
         
         document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-        document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
+        const desktopTab = document.querySelector(`.tab[data-tab="${tab}"]`);
+        if (desktopTab) desktopTab.classList.add('active');
+        
+        // Sync mobile navigation
+        document.querySelectorAll('.mobile-nav-item').forEach(nav => {
+            nav.classList.remove('active');
+            if (nav.dataset.tab === tab) nav.classList.add('active');
+        });
+        // If no tab matched (e.g., "foryou"), highlight home
+        if (tab === 'foryou') {
+            const homeNav = document.getElementById('mobile-nav-home');
+            if (homeNav) homeNav.classList.add('active');
+        }
         
         document.querySelectorAll('.topic-tag').forEach(t => t.classList.remove('active'));
         
