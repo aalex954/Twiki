@@ -30,16 +30,127 @@ class TwikiApp {
             'comparison', 'question', 'myth_buster', 'quote', 'timeline'
         ];
         
-        // Topics for random exploration
+        // Track recently used topics to avoid repetition
+        this.recentTopics = [];
+        this.maxRecentTopics = 50;
+        
+        // Massively expanded topics for random exploration
         this.randomTopics = [
-            'Quantum physics', 'Ancient Rome', 'Black holes', 'Dinosaurs', 
-            'World War II', 'Human brain', 'Ocean', 'Volcanoes', 'DNA',
-            'Renaissance', 'Artificial intelligence', 'Climate change',
-            'Egyptian pyramids', 'Solar system', 'Evolution', 'Bacteria',
-            'Medieval Europe', 'Rainforest', 'Einstein', 'Industrial Revolution',
-            'Mythology', 'Cryptography', 'Vaccines', 'Coral reef',
-            'Philosophy', 'Psychology', 'Economics', 'Architecture',
-            'Music theory', 'Photography', 'Astronomy', 'Genetics'
+            // Science & Physics
+            'Quantum entanglement', 'String theory', 'Dark matter', 'Antimatter', 'Superconductivity',
+            'Particle physics', 'Nuclear fusion', 'Thermodynamics', 'Electromagnetism', 'Relativity',
+            'Higgs boson', 'Neutrino', 'Photon', 'Electron', 'Quark',
+            
+            // Space & Astronomy
+            'Black holes', 'Neutron stars', 'Pulsar', 'Quasar', 'Supernova',
+            'Andromeda Galaxy', 'Milky Way', 'Jupiter', 'Saturn rings', 'Mars exploration',
+            'Voyager program', 'James Webb telescope', 'Exoplanet', 'Asteroid belt', 'Kuiper belt',
+            'Big Bang', 'Cosmic microwave background', 'Dark energy', 'Nebula', 'Binary star',
+            
+            // Ancient History
+            'Ancient Rome', 'Roman Empire', 'Julius Caesar', 'Cleopatra', 'Alexander the Great',
+            'Ancient Greece', 'Sparta', 'Athens', 'Parthenon', 'Olympic Games ancient',
+            'Egyptian pyramids', 'Tutankhamun', 'Nefertiti', 'Hieroglyphics', 'Valley of the Kings',
+            'Mesopotamia', 'Babylon', 'Sumerian civilization', 'Hammurabi', 'Cuneiform',
+            'Persian Empire', 'Cyrus the Great', 'Persepolis', 'Achaemenid Empire',
+            'Han dynasty', 'Qin Shi Huang', 'Terracotta Army', 'Great Wall of China',
+            'Mayan civilization', 'Aztec Empire', 'Inca Empire', 'Machu Picchu', 'Teotihuacan',
+            'Viking Age', 'Norse mythology', 'Ragnar Lothbrok', 'Leif Erikson',
+            
+            // Medieval & Renaissance
+            'Medieval Europe', 'Crusades', 'Knights Templar', 'Black Death', 'Feudalism',
+            'Byzantine Empire', 'Ottoman Empire', 'Suleiman the Magnificent', 'Constantinople',
+            'Renaissance', 'Leonardo da Vinci', 'Michelangelo', 'Sistine Chapel', 'Mona Lisa',
+            'Gutenberg printing press', 'Marco Polo', 'Silk Road', 'Genghis Khan', 'Mongol Empire',
+            
+            // Modern History
+            'French Revolution', 'Napoleon Bonaparte', 'Industrial Revolution', 'Victorian era',
+            'American Revolution', 'Civil War United States', 'Abraham Lincoln',
+            'World War I', 'World War II', 'D-Day', 'Pearl Harbor', 'Holocaust',
+            'Cold War', 'Space Race', 'Moon landing', 'Berlin Wall', 'Soviet Union',
+            
+            // Biology & Nature
+            'DNA', 'CRISPR', 'Genetics', 'Evolution', 'Natural selection',
+            'Human brain', 'Neurons', 'Consciousness', 'Memory', 'Sleep science',
+            'Photosynthesis', 'Cell biology', 'Mitochondria', 'Bacteria', 'Virus',
+            'Dinosaurs', 'Tyrannosaurus rex', 'Velociraptor', 'Extinction event', 'Fossils',
+            'Deep sea creatures', 'Bioluminescence', 'Giant squid', 'Coral reef', 'Great Barrier Reef',
+            'Rainforest', 'Amazon rainforest', 'Biodiversity', 'Endangered species', 'Conservation',
+            'Octopus intelligence', 'Dolphin', 'Whale', 'Elephant memory', 'Crow intelligence',
+            
+            // Geography & Earth Science
+            'Volcanoes', 'Earthquakes', 'Plate tectonics', 'Ring of Fire', 'Yellowstone supervolcano',
+            'Ocean currents', 'Mariana Trench', 'Atlantic Ocean', 'Pacific Ocean', 'Arctic',
+            'Antarctica', 'Mount Everest', 'Grand Canyon', 'Amazon River', 'Nile River',
+            'Sahara Desert', 'Gobi Desert', 'Tundra', 'Climate change', 'Ice age',
+            
+            // Technology & Computing
+            'Artificial intelligence', 'Machine learning', 'Neural networks', 'ChatGPT history',
+            'Internet history', 'World Wide Web', 'Tim Berners-Lee', 'Alan Turing', 'Enigma machine',
+            'Cryptography', 'Blockchain', 'Quantum computing', 'Cybersecurity', 'Hacking',
+            'Video game history', 'Nintendo', 'PlayStation history', 'Virtual reality',
+            
+            // Medicine & Health
+            'Vaccines', 'Antibiotics', 'Penicillin', 'Surgery history', 'Anesthesia',
+            'Human heart', 'Blood types', 'Immune system', 'Cancer research', 'Stem cells',
+            'Epidemics history', 'Spanish flu', 'Smallpox', 'Polio', 'Malaria',
+            
+            // Psychology & Mind
+            'Psychology', 'Sigmund Freud', 'Carl Jung', 'Cognitive bias', 'Optical illusions',
+            'Dreams', 'Déjà vu', 'Synesthesia', 'Placebo effect', 'Stockholm syndrome',
+            'Personality types', 'Introversion', 'Emotional intelligence', 'Meditation',
+            
+            // Philosophy & Religion
+            'Philosophy', 'Socrates', 'Plato', 'Aristotle', 'Stoicism',
+            'Buddhism', 'Hinduism', 'Islam history', 'Christianity history', 'Judaism',
+            'Greek mythology', 'Roman mythology', 'Egyptian mythology', 'Norse gods',
+            'Ethics', 'Existentialism', 'Nihilism', 'Utilitarianism', 'Free will',
+            
+            // Arts & Culture
+            'Renaissance art', 'Impressionism', 'Pablo Picasso', 'Vincent van Gogh', 'Surrealism',
+            'Architecture history', 'Gothic architecture', 'Art Deco', 'Bauhaus',
+            'Classical music', 'Ludwig van Beethoven', 'Wolfgang Amadeus Mozart', 'Johann Sebastian Bach',
+            'Jazz history', 'Rock and roll history', 'Hip hop history', 'The Beatles',
+            'Film history', 'Hollywood', 'Animation history', 'Studio Ghibli',
+            'Theatre history', 'William Shakespeare', 'Broadway', 'Opera',
+            
+            // Literature
+            'Ancient literature', 'Homer Iliad', 'Odyssey', 'Epic of Gilgamesh',
+            'Jane Austen', 'Charles Dickens', 'Mark Twain', 'Edgar Allan Poe',
+            'Science fiction history', 'Fantasy literature', 'Mystery fiction',
+            
+            // Economics & Society
+            'Economics', 'Capitalism', 'Communism', 'Great Depression', 'Stock market crash 1929',
+            'Globalization', 'Trade history', 'Silk Road trade', 'East India Company',
+            'Labor movement', 'Suffrage movement', 'Civil rights movement',
+            
+            // Sports & Games
+            'Olympic Games history', 'FIFA World Cup', 'Super Bowl', 'Basketball history',
+            'Baseball history', 'Tennis history', 'Golf history', 'Formula One',
+            'Chess history', 'Poker history', 'Board games history', 'Martial arts',
+            
+            // Food & Cuisine
+            'Coffee history', 'Tea history', 'Chocolate history', 'Wine history', 'Beer history',
+            'Sushi', 'Pizza history', 'Spice trade', 'French cuisine', 'Italian cuisine',
+            'Fermentation', 'Bread history', 'Sugar history', 'Salt history',
+            
+            // Inventions & Discoveries
+            'Wheel invention', 'Fire discovery', 'Compass invention', 'Telescope invention',
+            'Microscope invention', 'Steam engine', 'Light bulb', 'Telephone invention',
+            'Radio invention', 'Television history', 'Airplane invention', 'Wright brothers',
+            'Automobile history', 'Henry Ford', 'Rocket science', 'Nuclear power',
+            
+            // Mysteries & Unexplained
+            'Bermuda Triangle', 'Stonehenge', 'Nazca Lines', 'Easter Island statues',
+            'Atlantis', 'Loch Ness Monster', 'Area 51', 'Roswell incident',
+            'Voynich manuscript', 'Antikythera mechanism', 'Sailing stones', 'Ball lightning',
+            
+            // Famous People
+            'Albert Einstein', 'Isaac Newton', 'Nikola Tesla', 'Thomas Edison', 'Marie Curie',
+            'Charles Darwin', 'Galileo Galilei', 'Copernicus', 'Stephen Hawking',
+            'Winston Churchill', 'Franklin D. Roosevelt', 'Mahatma Gandhi', 'Nelson Mandela',
+            'Queen Victoria', 'Catherine the Great', 'Elizabeth I', 'Louis XIV',
+            'Sigmund Freud', 'Florence Nightingale', 'Ada Lovelace', 'Amelia Earhart'
         ];
         
         this.init();
@@ -275,6 +386,8 @@ class TwikiApp {
     refreshFeed() {
         this.feed.innerHTML = '';
         this.postCount = 0;
+        // Clear recent topics on refresh to allow fresh content
+        this.recentTopics = [];
         this.loadInitialFeed();
     }
     
@@ -357,31 +470,81 @@ class TwikiApp {
         // Handle memes tab - use funny/meme-friendly topics
         if (this.currentTab === 'memes' || this.currentTopic === 'Memes') {
             const memeTopics = [
-                'Procrastination', 'Coffee', 'Sleep deprivation', 'Monday', 'Cats',
-                'Dogs', 'Pizza', 'Internet culture', 'Social media', 'Smartphone',
-                'Netflix', 'Video games', 'Homework', 'Alarm clock', 'Traffic',
-                'Weather', 'Meetings', 'Email', 'Wifi', 'Battery life',
-                'Autocorrect', 'Passwords', 'Updates', 'Loading screen', 'Buffering',
-                'Adulthood', 'Taxes', 'Grocery shopping', 'Laundry', 'Cooking',
-                'Exercise', 'Diet', 'Sleep', 'Work', 'Commute',
-                'Introvert', 'Extrovert', 'Anxiety', 'Memory', 'Time management',
+                // Relatable daily life
+                'Procrastination', 'Coffee', 'Sleep deprivation', 'Monday', 'Friday',
+                'Alarm clock', 'Snooze button', 'Morning routine', 'Bedtime', 'Napping',
+                'Traffic', 'Public transportation', 'Commute', 'Parking', 'Road rage',
+                'Meetings', 'Email', 'Zoom fatigue', 'Work from home', 'Office politics',
+                'Grocery shopping', 'Laundry', 'Cooking', 'Cleaning', 'Dishes',
+                'Taxes', 'Bills', 'Budgeting', 'Paycheck', 'Shopping',
+                
+                // Technology struggles
+                'Wifi', 'Battery life', 'Autocorrect', 'Passwords', 'Software updates',
+                'Loading screen', 'Buffering', 'Blue screen of death', 'Tech support',
+                'Smartphone addiction', 'Notification', 'Browser tabs', 'Cloud storage',
+                'Printer problems', 'USB direction', 'Tangled headphones', 'Charging cable',
+                
+                // Social & relationships
+                'Introvert', 'Extrovert', 'Social anxiety', 'Small talk', 'Awkward silence',
+                'Friendship', 'Dating', 'Texting etiquette', 'Read receipts', 'Group chat',
+                'Party', 'FOMO', 'Social media', 'Selfie', 'Photobomb',
+                
+                // Food & drink
+                'Pizza', 'Tacos', 'Sushi', 'Fast food', 'Midnight snack',
+                'Diet', 'Calories', 'Salad', 'Dessert', 'Food coma',
+                'Coffee addiction', 'Energy drinks', 'Water reminder', 'Cooking fails',
+                
+                // Animals
+                'Cats', 'Dogs', 'Cat behavior', 'Dog behavior', 'Pet ownership',
+                'Birds', 'Squirrels', 'Raccoons', 'Ducks', 'Pigeons',
+                
+                // Pop culture references
+                'Meme culture', 'Internet culture', 'Video games', 'Netflix', 'Streaming',
+                'Binge watching', 'Spoilers', 'Fan theory', 'Nostalgia', 'Childhood',
+                
+                // Education & work
+                'Homework', 'Procrastination', 'All-nighter', 'Group project', 'Deadline',
+                'Resume', 'Job interview', 'First day', 'Imposter syndrome', 'Burnout',
+                
+                // Miscellaneous fun
                 'Dinosaurs', 'Ancient Egypt', 'Vikings', 'Pirates', 'Ninjas',
-                'Robots', 'Aliens', 'Conspiracy theories', 'Flat Earth', 'Bermuda Triangle'
+                'Robots', 'Aliens', 'Time travel', 'Parallel universe', 'Simulation theory',
+                'Conspiracy theories', 'Flat Earth', 'Bermuda Triangle', 'Area 51',
+                'Horoscopes', 'Superstition', 'Luck', 'Murphy\'s law', 'Irony',
+                
+                // Seasons & weather
+                'Summer', 'Winter', 'Rain', 'Snow', 'Humidity',
+                'Air conditioning', 'Heating', 'Weather forecast', 'Umbrella',
+                
+                // Health & fitness
+                'Exercise', 'Gym', 'New Year resolution', 'Step counter', 'Stretching',
+                'Back pain', 'Headache', 'Allergies', 'Common cold', 'Doctor visit',
+                
+                // Time & aging
+                'Aging', 'Birthday', 'Memory', 'Nostalgia', 'Time flies',
+                'Childhood memories', 'Adulting', 'Quarter life crisis', 'Midlife crisis'
             ];
-            searchTerm = memeTopics[Math.floor(Math.random() * memeTopics.length)];
+            searchTerm = this.getUniqueRandomTopic(memeTopics);
         } else if (this.currentTopic) {
-            searchTerm = this.currentTopic;
+            // For user-selected topics, search for related articles instead of just the topic itself
+            searchTerm = await this.getRelatedArticle(this.currentTopic);
         } else if (this.currentTab === 'random') {
-            // Get random article
+            // Get truly random article from Wikipedia
             const randomUrl = 'https://en.wikipedia.org/api/rest_v1/page/random/summary';
-            const response = await fetch(randomUrl);
-            const data = await response.json();
-            return {
-                title: data.title,
-                extract: data.extract,
-                url: data.content_urls?.desktop?.page || `https://en.wikipedia.org/wiki/${encodeURIComponent(data.title)}`,
-                thumbnail: data.thumbnail?.source
-            };
+            try {
+                const response = await fetch(randomUrl);
+                const data = await response.json();
+                // Track this topic
+                this.trackRecentTopic(data.title);
+                return {
+                    title: data.title,
+                    extract: data.extract,
+                    url: data.content_urls?.desktop?.page || `https://en.wikipedia.org/wiki/${encodeURIComponent(data.title)}`,
+                    thumbnail: data.thumbnail?.source
+                };
+            } catch (e) {
+                console.log('Random article fetch failed');
+            }
         } else if (this.currentTab === 'trending') {
             // Use "On this day" or featured content
             const today = new Date();
@@ -393,9 +556,15 @@ class TwikiApp {
                 const response = await fetch(onThisDayUrl);
                 const data = await response.json();
                 if (data.events && data.events.length > 0) {
-                    const event = data.events[Math.floor(Math.random() * data.events.length)];
+                    // Get a random event we haven't shown recently
+                    const availableEvents = data.events.filter(e => 
+                        e.pages?.[0] && !this.recentTopics.includes(e.pages[0].title)
+                    );
+                    const events = availableEvents.length > 0 ? availableEvents : data.events;
+                    const event = events[Math.floor(Math.random() * events.length)];
                     const page = event.pages?.[0];
                     if (page) {
+                        this.trackRecentTopic(page.title);
                         return {
                             title: page.title,
                             extract: page.extract || event.text,
@@ -409,13 +578,70 @@ class TwikiApp {
             } catch (e) {
                 console.log('On this day fetch failed, falling back to random');
             }
-            searchTerm = this.randomTopics[Math.floor(Math.random() * this.randomTopics.length)];
+            searchTerm = this.getUniqueRandomTopic(this.randomTopics);
         } else {
-            // For You - mix of random topics
-            searchTerm = this.randomTopics[Math.floor(Math.random() * this.randomTopics.length)];
+            // For You - mix of random topics, avoiding recent ones
+            searchTerm = this.getUniqueRandomTopic(this.randomTopics);
         }
         
-        // Search Wikipedia
+        // Search Wikipedia with the term
+        return await this.searchWikipedia(searchTerm);
+    }
+    
+    // Get a random topic we haven't used recently
+    getUniqueRandomTopic(topicList) {
+        // Filter out recently used topics
+        const availableTopics = topicList.filter(t => !this.recentTopics.includes(t));
+        
+        // If we've used most topics, use any topic
+        const topics = availableTopics.length > 5 ? availableTopics : topicList;
+        const topic = topics[Math.floor(Math.random() * topics.length)];
+        
+        this.trackRecentTopic(topic);
+        return topic;
+    }
+    
+    // Track recently used topics
+    trackRecentTopic(topic) {
+        if (!this.recentTopics.includes(topic)) {
+            this.recentTopics.push(topic);
+            if (this.recentTopics.length > this.maxRecentTopics) {
+                this.recentTopics.shift();
+            }
+        }
+    }
+    
+    // Get a related article for a topic to add variety
+    async getRelatedArticle(topic) {
+        try {
+            // Search for articles related to the topic
+            const searchApiUrl = `https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(topic)}&srlimit=20&format=json&origin=*`;
+            const response = await fetch(searchApiUrl);
+            const data = await response.json();
+            
+            if (data.query?.search?.length > 0) {
+                // Filter out recently used articles
+                const availableResults = data.query.search.filter(r => 
+                    !this.recentTopics.includes(r.title)
+                );
+                
+                const results = availableResults.length > 0 ? availableResults : data.query.search;
+                // Pick a random result from the search results
+                const randomIndex = Math.floor(Math.random() * results.length);
+                const selectedTitle = results[randomIndex].title;
+                this.trackRecentTopic(selectedTitle);
+                return selectedTitle;
+            }
+        } catch (e) {
+            console.log('Related article search failed');
+        }
+        
+        this.trackRecentTopic(topic);
+        return topic;
+    }
+    
+    // Search Wikipedia for an article
+    async searchWikipedia(searchTerm) {
         const searchUrl = `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(searchTerm)}`;
         
         try {
