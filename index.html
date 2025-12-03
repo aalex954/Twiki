@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Twiki - Educational Doom Scrolling</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <nav class="sidebar">
+            <div class="logo">
+                <svg viewBox="0 0 24 24" class="logo-icon">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+                </svg>
+                <span>Twiki</span>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item active">
+                    <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+                    <span>Home</span>
+                </li>
+                <li class="nav-item" id="explore-btn">
+                    <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+                    <span>Explore</span>
+                </li>
+                <li class="nav-item" id="refresh-btn">
+                    <svg viewBox="0 0 24 24"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+                    <span>Refresh Feed</span>
+                </li>
+            </ul>
+            <div class="api-config">
+                <button id="config-btn" class="config-button">
+                    <svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.31.06-.63.06-.94 0-.31-.02-.63-.06-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.04.31-.06.63-.06.94s.02.63.06.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
+                    API Settings
+                </button>
+            </div>
+        </nav>
+
+        <!-- Main Feed -->
+        <main class="main-content">
+            <header class="feed-header">
+                <h1>Home</h1>
+                <div class="feed-tabs">
+                    <button class="tab active" data-tab="foryou">For You</button>
+                    <button class="tab" data-tab="trending">Trending</button>
+                    <button class="tab" data-tab="random">Random</button>
+                </div>
+            </header>
+            
+            <div class="feed-container" id="feed">
+                <!-- Posts will be dynamically inserted here -->
+            </div>
+            
+            <div class="loading-spinner" id="loading">
+                <div class="spinner"></div>
+                <p>Fetching knowledge from Wikipedia...</p>
+            </div>
+        </main>
+
+        <!-- Right Sidebar -->
+        <aside class="right-sidebar">
+            <div class="search-box">
+                <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+                <input type="text" placeholder="Search topics..." id="search-input">
+            </div>
+            
+            <div class="trending-section">
+                <h2>Topics to Explore</h2>
+                <div class="topic-tags" id="topic-tags">
+                    <span class="topic-tag" data-topic="Science">🔬 Science</span>
+                    <span class="topic-tag" data-topic="History">📜 History</span>
+                    <span class="topic-tag" data-topic="Space">🚀 Space</span>
+                    <span class="topic-tag" data-topic="Animals">🦁 Animals</span>
+                    <span class="topic-tag" data-topic="Technology">💻 Technology</span>
+                    <span class="topic-tag" data-topic="Art">🎨 Art</span>
+                    <span class="topic-tag" data-topic="Music">🎵 Music</span>
+                    <span class="topic-tag" data-topic="Food">🍕 Food</span>
+                    <span class="topic-tag" data-topic="Sports">⚽ Sports</span>
+                    <span class="topic-tag" data-topic="Philosophy">🤔 Philosophy</span>
+                </div>
+            </div>
+            
+            <div class="info-section">
+                <h3>About Twiki</h3>
+                <p>Healthy doom scrolling powered by Wikipedia knowledge and AI-generated engaging content.</p>
+                <p class="disclaimer">All facts sourced from Wikipedia. Posts created by AI for educational entertainment.</p>
+            </div>
+        </aside>
+    </div>
+
+    <!-- API Config Modal -->
+    <div class="modal" id="config-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>API Configuration</h2>
+                <button class="close-btn" id="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="api-key">OpenAI API Key</label>
+                    <input type="password" id="api-key" placeholder="sk-...">
+                    <p class="help-text">Your API key is stored locally and never sent to any server except OpenAI.</p>
+                </div>
+                <div class="form-group">
+                    <label for="model-select">Model</label>
+                    <select id="model-select">
+                        <option value="gpt-4o-mini">GPT-4o Mini (Faster, Cheaper)</option>
+                        <option value="gpt-4o">GPT-4o (Better Quality)</option>
+                        <option value="gpt-3.5-turbo">GPT-3.5 Turbo (Legacy)</option>
+                    </select>
+                </div>
+                
+                <div class="settings-divider">
+                    <span>Content Tone Settings</span>
+                </div>
+                
+                <div class="form-group slider-group">
+                    <label for="clickbait-slider">
+                        <span class="slider-icon">🎣</span> Clickbait Level
+                        <span class="slider-value" id="clickbait-value">50%</span>
+                    </label>
+                    <input type="range" id="clickbait-slider" min="0" max="100" value="50">
+                    <p class="help-text">How sensational and attention-grabbing the headlines are</p>
+                </div>
+                
+                <div class="form-group slider-group">
+                    <label for="ragebait-slider">
+                        <span class="slider-icon">🔥</span> Ragebait Level
+                        <span class="slider-value" id="ragebait-value">20%</span>
+                    </label>
+                    <input type="range" id="ragebait-slider" min="0" max="100" value="20">
+                    <p class="help-text">How provocative and debate-sparking the content is</p>
+                </div>
+                
+                <div class="form-group slider-group">
+                    <label for="shocking-slider">
+                        <span class="slider-icon">😱</span> Shock Factor
+                        <span class="slider-value" id="shocking-value">40%</span>
+                    </label>
+                    <input type="range" id="shocking-slider" min="0" max="100" value="40">
+                    <p class="help-text">How jaw-dropping and mind-blowing the revelations are</p>
+                </div>
+                
+                <div class="form-group slider-group">
+                    <label for="darkness-slider">
+                        <span class="slider-icon">🌑</span> Emotional Depth
+                        <span class="slider-value" id="darkness-value">10%</span>
+                    </label>
+                    <input type="range" id="darkness-slider" min="0" max="100" value="10">
+                    <p class="help-text">How emotionally heavy and thought-provoking the content is</p>
+                </div>
+                
+                <button class="save-btn" id="save-config">Save Configuration</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
