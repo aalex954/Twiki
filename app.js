@@ -270,7 +270,22 @@ class TwikiApp {
     async fetchWikipediaContent() {
         let searchTerm;
         
-        if (this.currentTopic) {
+        // Handle memes tab - use funny/meme-friendly topics
+        if (this.currentTab === 'memes' || this.currentTopic === 'Memes') {
+            const memeTopics = [
+                'Procrastination', 'Coffee', 'Sleep deprivation', 'Monday', 'Cats',
+                'Dogs', 'Pizza', 'Internet culture', 'Social media', 'Smartphone',
+                'Netflix', 'Video games', 'Homework', 'Alarm clock', 'Traffic',
+                'Weather', 'Meetings', 'Email', 'Wifi', 'Battery life',
+                'Autocorrect', 'Passwords', 'Updates', 'Loading screen', 'Buffering',
+                'Adulthood', 'Taxes', 'Grocery shopping', 'Laundry', 'Cooking',
+                'Exercise', 'Diet', 'Sleep', 'Work', 'Commute',
+                'Introvert', 'Extrovert', 'Anxiety', 'Memory', 'Time management',
+                'Dinosaurs', 'Ancient Egypt', 'Vikings', 'Pirates', 'Ninjas',
+                'Robots', 'Aliens', 'Conspiracy theories', 'Flat Earth', 'Bermuda Triangle'
+            ];
+            searchTerm = memeTopics[Math.floor(Math.random() * memeTopics.length)];
+        } else if (this.currentTopic) {
             searchTerm = this.currentTopic;
         } else if (this.currentTab === 'random') {
             // Get random article
@@ -354,13 +369,48 @@ class TwikiApp {
     }
     
     async generatePost(wikiData) {
-        const style = this.postStyles[Math.floor(Math.random() * this.postStyles.length)];
+        // Force meme style for memes tab/topic
+        const isMemeMode = this.currentTab === 'memes' || this.currentTopic === 'Memes';
+        const style = isMemeMode ? 'meme' : this.postStyles[Math.floor(Math.random() * this.postStyles.length)];
         
         const stylePrompts = {
             viral_fact: "Create a viral, mind-blowing fact tweet that will make people go 'Wait, WHAT?!' Use dramatic language and end with something that makes people want to share.",
             hot_take: "Create a spicy, thought-provoking hot take or controversial-sounding (but factually accurate) opinion that will spark discussion.",
             thread: "Create the first tweet of what would be a fascinating thread. Start with a hook like 'A thread 🧵' and make people desperate to read more.",
-            meme: "Create a funny, meme-style tweet. Use humor, relatable comparisons, or absurdist comedy while still being educational.",
+            meme: `Create a genuinely funny Twitter/X or Reddit-style shitpost about this topic. 
+
+USE THESE AUTHENTIC FORMATS (pick one randomly):
+- "me: I should sleep / my brain at 3am: [weird fact about topic]"
+- "nobody: / absolutely nobody: / [topic]: [absurd behavior]"
+- "[topic] said '🧍' and left" or "[topic] really said '[quote]' and dipped"
+- "not [topic] being [absurd observation] 💀"
+- "the [topic] is giving ✨[ironic description]✨"
+- "pov: you just learned about [topic]" 
+- "[topic] walked so [other thing] could run"
+- "tell me you [x] without telling me you [x]"
+- "it's the [specific detail] for me 😭"
+- "normalize [absurd thing related to topic]"
+- "[topic] really woke up and chose violence"
+- "y'all ever just [absurd action related to topic]?"
+- "the way [topic] [does something] is sending me 💀"
+- "[topic] hits different at 2am"
+- "i was today years old when i learned [fact]"
+- "no one's gonna talk about how [topic] [observation]?"
+- "[topic] is just [absurd simplified description]"
+- "scientists: [fact] / me: 👁👄👁"
+- "[topic] living rent free in my head"
+- "the duality of [topic] 😭"
+
+CRITICAL STYLE RULES:
+- Use lowercase for that authentic shitpost energy
+- Heavy emoji usage: 💀😭🧍✨👁👄👁😤🗣️📢🤡👀🙃😩🥴
+- Include "i-" or "i can't" or "im crying" or "this is sending me" 
+- Be unhinged but factual
+- Sound like a real person losing their mind over a random fact
+- Use "ngl", "lowkey", "highkey", "fr fr", "no cap", "deadass"
+- Can use "bestie", "babe", "girlie" sarcastically
+- Reference "my last brain cell" or "my therapist"
+- Sound sleep deprived and slightly unhinged`,
             til: "Create a 'Today I Learned' (TIL) style tweet that shares a genuinely surprising fact in a conversational way.",
             comparison: "Create a tweet that makes a surprising comparison or puts something in perspective (like 'X is older than Y' or 'X is bigger than Y').",
             question: "Create a rhetorical question tweet that makes people think, followed by a mind-blowing answer or fact.",
@@ -444,7 +494,7 @@ When creating content:
                         { role: 'user', content: prompt }
                     ],
                     max_completion_tokens: 150,
-                    temperature: 0.8
+                    temperature: isMemeMode ? 1.3 : 0.8
                 })
             });
             
