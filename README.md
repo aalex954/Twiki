@@ -77,6 +77,7 @@ No build process, no dependencies, no server required. Just open and go.
 
 - **For You**: Random mix of fascinating topics
 - **Trending**: Historical events that happened on today's date
+- **Memes**: Twitter/Reddit-style shitposts with educational facts
 - **Random**: Completely random Wikipedia articles
 
 ### Topic Tags
@@ -92,6 +93,7 @@ Click any topic tag in the right sidebar to filter content:
 - 🍕 Food
 - ⚽ Sports
 - 🤔 Philosophy
+- 😂 Memes
 
 ### Search
 
@@ -104,7 +106,7 @@ Use the search bar to explore any topic you're curious about.
 | Setting | Options | Description |
 |---------|---------|-------------|
 | OpenAI API Key | Your key | Required for generating posts |
-| Model | GPT-4o Mini, GPT-4o, GPT-3.5 Turbo | Choose speed vs quality |
+| Model | GPT-5 Nano, GPT-5 Mini, GPT-5.1, GPT-4.1 Mini, GPT-4.1 | Choose speed vs quality |
 
 ### Tone Settings
 
@@ -137,8 +139,8 @@ Twiki/
    - `/feed/onthisday/events/{MM}/{DD}` - Historical events
 
 2. **OpenAI Chat Completions API**
-   - Models: gpt-4o-mini, gpt-4o, gpt-3.5-turbo
-   - Temperature: 0.8 (balanced creativity/accuracy)
+   - Models: GPT-5 Nano, GPT-5 Mini, GPT-5.1, GPT-4.1 Mini, GPT-4.1
+   - Temperature: 0.8 (standard) / 1.3 (meme mode for extra chaos)
 
 ### Browser Compatibility
 
