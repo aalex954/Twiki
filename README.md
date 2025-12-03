@@ -3,6 +3,8 @@
 **Educational Doom Scrolling** - A Twitter/X-style feed powered by Wikipedia knowledge and AI-generated engaging content.
 
 ![Twiki Banner](https://img.shields.io/badge/Powered%20by-Wikipedia%20%2B%20OpenAI-blue)
+[![Deploy Twiki](https://github.com/aalex954/Twiki/actions/workflows/static.yml/badge.svg)](https://github.com/aalex954/Twiki/actions/workflows/static.yml)
+
 
 ## Overview
 
