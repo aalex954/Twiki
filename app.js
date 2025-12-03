@@ -7,7 +7,7 @@ class TwikiApp {
         this.loading = document.getElementById('loading');
         this.configModal = document.getElementById('config-modal');
         this.apiKey = localStorage.getItem('openai_api_key') || '';
-        this.model = localStorage.getItem('openai_model') || 'gpt-4o-mini';
+        this.model = localStorage.getItem('openai_model') || 'gpt-5-mini';
         
         // Content tone settings (0-100 scale)
         this.toneSettings = JSON.parse(localStorage.getItem('tone_settings')) || {
@@ -443,7 +443,7 @@ When creating content:
                         },
                         { role: 'user', content: prompt }
                     ],
-                    max_tokens: 150,
+                    max_completion_tokens: 150,
                     temperature: 0.8
                 })
             });
