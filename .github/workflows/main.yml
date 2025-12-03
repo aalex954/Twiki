@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: 'Version number (e.g., 0.1.0)'
+        description: 'Version number (e.g., 1.0.0)'
         required: true
         default: '1.0.0'
 
@@ -38,15 +38,12 @@ jobs:
         run: |
           VERSION="${{ steps.get_version.outputs.VERSION }}"
           
-          # Update mobile header version
-          sed -i 's/<span class="version-text">v[^<]*<\/span>/<span class="version-text">v'"$VERSION"'<\/span>/g' index.html
+          # Update all version-text spans with the new version
+          sed -i -E 's/(<span class="version-text">)v[0-9]+\.[0-9]+\.[0-9]+(<\/span>)/\1v'"$VERSION"'\2/g' index.html
           
-          # Update sidebar version
-          sed -i 's/<span class="version-text">v[^<]*<\/span>/<span class="version-text">v'"$VERSION"'<\/span>/g' index.html
-          
-          # If version text doesn't exist yet, this is handled by the initial HTML structure
-          
+          # Show the result
           echo "Updated version to v$VERSION"
+          grep -n "version-text" index.html || echo "No version-text found in file"
 
       - name: Commit and push changes
         run: |
