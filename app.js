@@ -696,21 +696,39 @@ class TwikiApp {
     }
     
     async generatePost(wikiData) {
+        // Validate input
+        if (!wikiData || !wikiData.extract || !wikiData.title) {
+            console.warn('Invalid wikiData:', wikiData);
+            return null;
+        }
+        
         // Force meme style for memes tab/topic
         const isMemeMode = this.currentTab === 'memes' || this.currentTopic === 'Memes';
-        const style = isMemeMode ? 'meme' : this.postStyles[Math.floor(Math.random() * this.postStyles.length)];
+        
+        let style;
+        if (isMemeMode) {
+            const memeStyles = ['meme_shitpost', 'meme_surreal', 'meme_rant', 'meme_galaxy_brain', 'meme_existential'];
+            style = memeStyles[Math.floor(Math.random() * memeStyles.length)];
+        } else {
+            style = this.postStyles[Math.floor(Math.random() * this.postStyles.length)];
+        }
         
         const stylePrompts = {
             viral_fact: "Create a viral, mind-blowing fact tweet that will make people go 'Wait, WHAT?!' Use dramatic language, build suspense, and end with a punchline that makes people want to share immediately.",
             hot_take: "Create a spicy, thought-provoking hot take or controversial-sounding (but factually accurate) opinion. Challenge the status quo or a common belief about this topic. Make people want to argue in the replies.",
             thread: "Create the first tweet of what would be a fascinating thread. Start with a hook like 'A thread 🧵' or 'Here's the story of...' and make people desperate to read more. Tease a crazy detail that comes later.",
-            meme: `Create an UNHINGED, chronically online Twitter/X or Reddit shitpost. This needs to feel like it was written by someone who hasn't slept in 3 days and just discovered this fact at 4am. Use internet slang appropriately (fr, no cap, skull emoji, etc.) but keep it readable.`,
+            meme: "Create an UNHINGED, chronically online Twitter/X or Reddit shitpost. This needs to feel like it was written by someone who hasn't slept in 3 days and just discovered this fact at 4am. Use internet slang appropriately (fr, no cap, skull emoji, etc.) but keep it readable.",
             til: "Create a 'Today I Learned' (TIL) style tweet that shares a genuinely surprising fact in a conversational way. Frame it as a personal discovery that blew your mind.",
             comparison: "Create a tweet that makes a surprising comparison or puts something in perspective (like 'X is older than Y' or 'X is bigger than Y'). Use a concrete analogy that makes the scale or time difference feel real.",
             question: "Create a rhetorical question tweet that makes people think, followed by a mind-blowing answer or fact. Engage the reader directly: 'Did you know...?' or 'Have you ever wondered...?'",
             myth_buster: "Create a myth-busting tweet that corrects a common misconception. Start with 'Actually...' or 'Stop believing that...' and aggressively (but politely) correct the record with the truth.",
             quote: "If there's a relevant quote, create a tweet featuring it. Otherwise, create an insightful observation about the topic that sounds like a profound quote. Make it Pinterest-worthy but for Twitter.",
-            timeline: "Create a tweet that puts historical events in perspective. Connect two seemingly unrelated events that happened at the same time, or show how short/long a time period really was. 'Cleopatra lived closer to the iPhone than the Pyramids' style."
+            timeline: "Create a tweet that puts historical events in perspective. Connect two seemingly unrelated events that happened at the same time, or show how short/long a time period really was. 'Cleopatra lived closer to the iPhone than the Pyramids' style.",
+            meme_shitpost: "Create a low-effort, chaotic shitpost. Use lowercase, minimal punctuation, and internet slang (fr, ong, skull emoji). Be aggressively casual and dismissive or overly hyped about a mundane detail. DO NOT start with 'Just found out'.",
+            meme_surreal: "Create a surreal, disjointed tweet that feels like a fever dream. Mix the factual information with bizarre, non-sequitur imagery. Make the reader question reality.",
+            meme_rant: "Write an unhinged, all-caps rant about this topic. Act like this specific fact is ruining your life or is the key to a global conspiracy. Use excessive punctuation (!!! ???). Scream into the void.",
+            meme_galaxy_brain: "Connect this topic to something completely unrelated in a 'galaxy brain' way. Make a wild philosophical leap that barely makes sense but sounds profound if you're high. Use the 🤯 emoji.",
+            meme_existential: "Use this fact to trigger an existential crisis. Start normal and spiral into dread about the nature of existence, time, or consciousness. End with 'we are dust' energy."
         };
         
         // Build tone instructions based on user settings
@@ -725,39 +743,17 @@ class TwikiApp {
             day: 'numeric' 
         });
         
-        const prompt = `You are a social media expert creating viral, educational content. 
+        const prompt = `TOPIC: ${wikiData.title}
 
-IMPORTANT: Today's date is ${dateString}. If referencing "today", "this day in history", or any current events, use this exact date.
+SOURCE MATERIAL:
+${wikiData.extract}
 
-Based on this Wikipedia content about "${wikiData.title}":
+STYLE: ${stylePrompts[style] || stylePrompts.viral_fact}
 
-"${wikiData.extract}"
-
-${wikiData.isOnThisDay ? `HISTORICAL EVENT: This event happened ON THIS DAY (${dateString.split(',')[0]}, specifically in the year ${wikiData.year}). You may reference this as "On this day in ${wikiData.year}..." or "X years ago today...". Calculate the years correctly based on today being ${today.getFullYear()}.` : ''}
-
-${stylePrompts[style]}
-
-TONE SETTINGS (adjust your writing style based on these levels from 0-100):
+TONE SETTINGS:
 ${toneInstructions}
 
-CRITICAL RULES - FOLLOW EXACTLY:
-- Maximum 280 characters (like Twitter/X)
-- Use 1-3 relevant emojis strategically
-- Include 1-2 relevant hashtags
-- Be ACCURATE to the source material - do not invent facts, statistics, or claims not in the source
-- Make it shareable and engaging
-- Don't mention Wikipedia or that this is AI-generated
-- Sound like a real person, not a textbook
-- Adjust your tone based on the settings above
-
-ACCURACY REQUIREMENTS:
-- If the source mentions specific numbers, dates, or statistics, use them EXACTLY as stated
-- Do NOT make up percentages, rankings, or comparisons not explicitly in the source
-- Do NOT claim something is "the largest", "the first", "the only", etc. unless the source says so
-- If referring to time periods, calculate years correctly from today's date (${dateString})
-- Do NOT assume facts about living/dead status of people unless stated
-- When the source is vague, keep your tweet appropriately vague rather than inventing specifics
-- If making comparisons (X is older than Y), only use verifiable information from the source
+Create a single tweet (max 280 characters) based on the source material above. Use 1-3 emojis and 1-2 hashtags. Be accurate to the source - do not invent facts. Sound like a real person, not a textbook.
 
 Respond with ONLY the tweet text, nothing else.`;
 
@@ -773,23 +769,11 @@ Respond with ONLY the tweet text, nothing else.`;
                     messages: [
                         { 
                             role: 'system', 
-                            content: `You are a viral social media content creator who makes educational content engaging and shareable. 
-
-CRITICAL: You must be factually accurate. Today's date is ${dateString}. The current year is ${today.getFullYear()}.
-
-When creating content:
-- Only state facts that are explicitly mentioned in the source material provided
-- Calculate time differences correctly (e.g., "X years ago" must be mathematically accurate)
-- Do not embellish or exaggerate beyond what the source states
-- Do not invent statistics, rankings, or superlatives not in the source
-- If someone's birth/death year is given, calculate their age correctly
-- Do not assume current status of people, places, or things without source confirmation`
+                            content: `You are a viral social media content creator. Create engaging tweets based on facts provided. Today is ${dateString}. Always respond with just the tweet text.`
                         },
                         { role: 'user', content: prompt }
                     ],
-                    max_completion_tokens: 150,
-                    // GPT-5 models only support default temperature (1), others can use custom
-                    ...(!this.model.startsWith('gpt-5') && { temperature: isMemeMode ? 1.3 : 0.8 })
+                    max_completion_tokens: 200
                 })
             });
             
@@ -799,8 +783,16 @@ When creating content:
             }
             
             const data = await response.json();
+            const text = data.choices?.[0]?.message?.content?.trim();
+            
+            // Validate we got actual content
+            if (!text || text.length < 10) {
+                console.warn('Empty or too short response from API:', text);
+                return null;
+            }
+            
             return {
-                text: data.choices[0].message.content.trim(),
+                text: text,
                 style: style,
                 id: `post_${Date.now()}_${this.postCount++}`
             };
