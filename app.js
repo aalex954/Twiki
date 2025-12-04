@@ -31,8 +31,8 @@ class TwikiApp {
         ];
         
         // Track recently used topics to avoid repetition
-        this.recentTopics = [];
-        this.maxRecentTopics = 50;
+        this.recentTopics = JSON.parse(localStorage.getItem('recent_topics') || '[]');
+        this.maxRecentTopics = 100;
         
         // Massively expanded topics for random exploration
         this.randomTopics = [
@@ -150,7 +150,24 @@ class TwikiApp {
             'Charles Darwin', 'Galileo Galilei', 'Copernicus', 'Stephen Hawking',
             'Winston Churchill', 'Franklin D. Roosevelt', 'Mahatma Gandhi', 'Nelson Mandela',
             'Queen Victoria', 'Catherine the Great', 'Elizabeth I', 'Louis XIV',
-            'Sigmund Freud', 'Florence Nightingale', 'Ada Lovelace', 'Amelia Earhart'
+            'Sigmund Freud', 'Florence Nightingale', 'Ada Lovelace', 'Amelia Earhart',
+
+            // Pop Culture & Internet
+            'Viral videos', 'Internet memes history', 'Social media evolution', 'Streaming wars',
+            'Influencer culture', 'Fandom culture', 'Cosplay', 'Esports', 'K-pop history',
+            'Anime history', 'Manga history', 'Comic book history', 'Marvel Cinematic Universe',
+            'Star Wars cultural impact', 'Harry Potter phenomenon', 'Game of Thrones cultural impact',
+            
+            // Urban Legends & Folklore
+            'Bigfoot', 'Chupacabra', 'Mothman', 'Jersey Devil', 'Slender Man',
+            'Bloody Mary folklore', 'Hookman', 'Vanishing hitchhiker', 'Black-eyed children',
+            'Polybius game', 'Sewer alligator', 'Razor blades in candy',
+            
+            // Weird Science & Oddities
+            'Spontaneous human combustion', 'Dancing Plague of 1518', 'Emu War', 'Great Molasses Flood',
+            'Rain of animals', 'Exploding head syndrome', 'Foreign accent syndrome', 'Cotard delusion',
+            'Capgras delusion', 'Fregoli delusion', 'Paris syndrome', 'Stendhal syndrome',
+            'Voynich manuscript', 'Mary Celeste', 'Dyatlov Pass incident', 'Tunguska event'
         ];
         
         this.init();
@@ -386,8 +403,7 @@ class TwikiApp {
     refreshFeed() {
         this.feed.innerHTML = '';
         this.postCount = 0;
-        // Clear recent topics on refresh to allow fresh content
-        this.recentTopics = [];
+        // Keep recent topics to avoid repetition across refreshes
         this.loadInitialFeed();
     }
     
@@ -608,6 +624,7 @@ class TwikiApp {
             if (this.recentTopics.length > this.maxRecentTopics) {
                 this.recentTopics.shift();
             }
+            localStorage.setItem('recent_topics', JSON.stringify(this.recentTopics));
         }
     }
     
@@ -684,16 +701,16 @@ class TwikiApp {
         const style = isMemeMode ? 'meme' : this.postStyles[Math.floor(Math.random() * this.postStyles.length)];
         
         const stylePrompts = {
-            viral_fact: "Create a viral, mind-blowing fact tweet that will make people go 'Wait, WHAT?!' Use dramatic language and end with something that makes people want to share.",
-            hot_take: "Create a spicy, thought-provoking hot take or controversial-sounding (but factually accurate) opinion that will spark discussion.",
-            thread: "Create the first tweet of what would be a fascinating thread. Start with a hook like 'A thread 🧵' and make people desperate to read more.",
-            meme: `Create an UNHINGED, chronically online Twitter/X or Reddit shitpost. This needs to feel like it was written by someone who hasn't slept in 3 days and just discovered this fact at 4am.`,
-            til: "Create a 'Today I Learned' (TIL) style tweet that shares a genuinely surprising fact in a conversational way.",
-            comparison: "Create a tweet that makes a surprising comparison or puts something in perspective (like 'X is older than Y' or 'X is bigger than Y').",
-            question: "Create a rhetorical question tweet that makes people think, followed by a mind-blowing answer or fact.",
-            myth_buster: "Create a myth-busting tweet that corrects a common misconception. Start with 'Actually...' or 'Contrary to popular belief...'",
-            quote: "If there's a relevant quote, create a tweet featuring it. Otherwise, create an insightful observation about the topic.",
-            timeline: "Create a tweet that puts historical events in perspective, like 'In the time since X happened, we've...' or 'X happened closer to Y than to today'"
+            viral_fact: "Create a viral, mind-blowing fact tweet that will make people go 'Wait, WHAT?!' Use dramatic language, build suspense, and end with a punchline that makes people want to share immediately.",
+            hot_take: "Create a spicy, thought-provoking hot take or controversial-sounding (but factually accurate) opinion. Challenge the status quo or a common belief about this topic. Make people want to argue in the replies.",
+            thread: "Create the first tweet of what would be a fascinating thread. Start with a hook like 'A thread 🧵' or 'Here's the story of...' and make people desperate to read more. Tease a crazy detail that comes later.",
+            meme: `Create an UNHINGED, chronically online Twitter/X or Reddit shitpost. This needs to feel like it was written by someone who hasn't slept in 3 days and just discovered this fact at 4am. Use internet slang appropriately (fr, no cap, skull emoji, etc.) but keep it readable.`,
+            til: "Create a 'Today I Learned' (TIL) style tweet that shares a genuinely surprising fact in a conversational way. Frame it as a personal discovery that blew your mind.",
+            comparison: "Create a tweet that makes a surprising comparison or puts something in perspective (like 'X is older than Y' or 'X is bigger than Y'). Use a concrete analogy that makes the scale or time difference feel real.",
+            question: "Create a rhetorical question tweet that makes people think, followed by a mind-blowing answer or fact. Engage the reader directly: 'Did you know...?' or 'Have you ever wondered...?'",
+            myth_buster: "Create a myth-busting tweet that corrects a common misconception. Start with 'Actually...' or 'Stop believing that...' and aggressively (but politely) correct the record with the truth.",
+            quote: "If there's a relevant quote, create a tweet featuring it. Otherwise, create an insightful observation about the topic that sounds like a profound quote. Make it Pinterest-worthy but for Twitter.",
+            timeline: "Create a tweet that puts historical events in perspective. Connect two seemingly unrelated events that happened at the same time, or show how short/long a time period really was. 'Cleopatra lived closer to the iPhone than the Pyramids' style."
         };
         
         // Build tone instructions based on user settings
